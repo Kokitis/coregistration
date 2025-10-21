@@ -3,6 +3,7 @@ from typing import *
 import pandas
 from dataclasses import dataclass
 
+
 @dataclass
 class ImagePair:
 	id_group: Any
@@ -11,13 +12,14 @@ class ImagePair:
 	path_reference: Path
 	path_query: Path
 
+
 class ImageManager:
-	def __init__(self, path:Path):
+	def __init__(self, path: Path):
 
 		self.groups = self.read_table(path)
 		self.index = 0
 
-	def modify_index(self, amount:int)->int:
+	def modify_index(self, amount: int) -> int:
 		self.index += amount
 		if self.index < 0:
 			self.index = 0
@@ -25,27 +27,25 @@ class ImageManager:
 			self.index = len(self.groups) - 1
 		return self.index
 
-	def get_current_barcodes(self)->Tuple[str, str]:
+	def get_current_barcodes(self) -> Tuple[str, str]:
 		pair = self.get_group(self.index)
 		return (pair.barcode_reference, pair.barcode_query)
 
-	def get_group(self, index:int = None)->ImagePair:
+	def get_group(self, index: int = None) -> ImagePair:
 		if index is None:
 			index = self.index
 		return self.groups[index]
 
-	def get_next_group(self)->ImagePair:
+	def get_next_group(self) -> ImagePair:
 		index = self.modify_index(1)
 		return self.groups[index]
 
-	def get_previous_group(self)->ImagePair:
+	def get_previous_group(self) -> ImagePair:
 		index = self.modify_index(-1)
 		return self.groups[index]
 
-
-
 	@staticmethod
-	def read_table(path:Path)->List[ImagePair]:
+	def read_table(path: Path) -> List[ImagePair]:
 		df = pandas.read_csv(path, sep = "\t")
 
 		groups = df.groupby(by = 'id:group')
@@ -64,14 +64,3 @@ class ImageManager:
 				records.append(pair)
 
 		return records
-
-
-def main():
-	from pprint import pprint
-	path = Path("/media/proginoskes/storage/proginoskes/Documents/projects/HCC-CBS-231-Hillman-JLuke-PDO-immune/data/PilotExpt-100125/debug/coregistration.tsv")
-	manager = ImageManager(path)
-	pprint(manager.groups)
-
-
-if __name__ == "__main__":
-	main()

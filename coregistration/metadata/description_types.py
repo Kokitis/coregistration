@@ -237,10 +237,3 @@ def get_data_type(data: Any):
 
 	return data_type
 
-
-def main():
-	pass
-
-
-if __name__ == "__main__":
-	main()

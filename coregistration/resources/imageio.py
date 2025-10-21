@@ -2,25 +2,16 @@ from pathlib import Path
 from typing import *
 
 import numpy
-#import roifile
+# import roifile
 
 import tifffile
 from loguru import logger
 from coregistration import dataio, metadata
-#from vectratools import arraytools, dataio, metadata
-#from vectratools.utilities import tifftools
+
+# from vectratools import arraytools, dataio, metadata
+# from vectratools.utilities import tifftools
 
 DEFAULT_FILLVALUE = None
-
-
-def _parse_color_string(text: str) -> str:
-	""" Converts the color specified in the tiff file to hex format. The color is usually formtted as '255,0,255'"""
-
-	string_red, string_green, string_blue, *_ = text.split(',')
-	value_red, value_green, value_blue = int(string_red), int(string_green), int(string_blue)
-
-	color = f"#{value_red:>02X}{value_green:>02X}{value_blue:>02X}"
-	return color
 
 
 class Image:
@@ -41,12 +32,12 @@ class Image:
 	"""
 
 	def __init__(
-		self, image: Union[numpy.array, Path, str], channels: Dict[str, metadata.ChannelData] = None,
-		channel_map: Dict[str, int] = None, barcode: str = None, tags: Dict[int, tifffile.TiffTag] = None, norm: bool = False, clip: bool = False):
+			self, image: Union[numpy.array, Path, str], channels: Dict[str, metadata.ChannelData] = None,
+			channel_map: Dict[str, int] = None, barcode: str = None, tags: Dict[int, tifffile.TiffTag] = None, norm: bool = False, clip: bool = False):
 
 		self.is_norm = norm
 		self.is_clip = clip
-		self.resolution_code = 1 # Indicates what the downscale factor is if the source is a wholeslide image.
+		self.resolution_code = 1  # Indicates what the downscale factor is if the source is a wholeslide image.
 
 		if isinstance(image, (str, Path)):
 			self.filename = Path(image)
@@ -147,29 +138,9 @@ class Image:
 	def multichannel(self) -> bool:
 		return self.data.ndim != 2
 
-
 	@property
 	def shape(self) -> Tuple[int, int, int]:
 		return self.data.shape
-
-
-
-	def check_index(self, value: Union[int, Tuple[int, int]], axis: Literal['x', 'y']):
-		order = 'zyx'  # THis should be the order of the image dimensions
-		if isinstance(value, tuple):
-			result = self.check_index(value[0], 'x'), self.check_index(value[1], 'y')
-		else:
-			minimum = 0
-			index_bounds = get_dimension(self.shape, order)
-			maximum = index_bounds[axis]
-			if value < minimum:
-				result = minimum
-			elif value > maximum:
-				result = maximum
-			else:
-				result = value
-		return result
-
 
 	def get_channel(self, index: Union[str, int]) -> Optional[numpy.ndarray]:
 		if isinstance(index, str):
@@ -203,6 +174,7 @@ def get_dimension(shape: Tuple, order: Literal['xyz', 'zyx'] = 'zyx') -> Dict[st
 
 if __name__ == "__main__":
 	import matplotlib.pyplot as plt
+
 	path = Path("/media/proginoskes/storage/proginoskes/Documents/projects/HCC-CBS-231-Hillman-JLuke-PDO-immune/data/PilotExpt-100125/images/merged/images/d10sA2t17.tif")
 	image = Image(path)
 	channel = image.get_channel("Brightfield")

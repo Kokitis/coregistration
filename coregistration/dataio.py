@@ -88,9 +88,3 @@ def read_array(source: Union[str, Path, numpy.ndarray], norm: bool = False, clip
 		array = _clip_array(array)
 	return array
 
-def main():
-	pass
-
-
-if __name__ == "__main__":
-	main()

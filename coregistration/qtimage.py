@@ -12,45 +12,6 @@ from pprint import pprint
 
 PointType = Tuple[int | float, int | float]
 
-
-class QtImage2(QtWidgets.QLabel):
-	def __init__(self, *args, **kwargs):
-		super().__init__(*args, **kwargs)
-		self.setSizePolicy(QtWidgets.QSizePolicy.Policy.Ignored, QtWidgets.QSizePolicy.Policy.Ignored)
-		self.setVisible(True)
-		self.maximum_height = 750
-
-		self.image: QtGui.QImage = None
-		self.pixmap: QtGui.QPixmap = None
-
-	def set_image(self, array: numpy.ndarray):
-		path = Path("/media/proginoskes/storage/proginoskes/Documents/projects/HCC-CBS-231-Hillman-JLuke-PDO-immune/data/PilotExpt-100125/images/merged/images/d10sA2t17.tif")
-		image = resources.Image(path)
-		array = image.get_channel("Brightfield")
-
-		self.image = numpy_array_to_qimage(array)
-		self.pixmap = QtGui.QPixmap.fromImage(self.image)
-		self.pixmap = self.pixmap.scaledToHeight(self.maximum_height)
-		self.setPixmap(self.pixmap)
-		width = self.pixmap.size().width()
-		height = self.pixmap.size().height()
-		x = numpy.random.randint(0, width, 10)
-		y = numpy.random.randint(0, height, 10)
-
-		coordinates = numpy.array([x, y]).transpose()
-
-		self.add_points(coordinates)
-
-	def add_poins(self, coordinates: numpy.ndarray):
-		painter = QtGui.QPainter(self)
-		pen = QtGui.QPen(QtGui.QColor(255, 0, 0))
-		pen.setWidth(10)
-		painter.setPen(pen)
-		for x, y in coordinates:
-			painter.drawPoint(QtCore.QPoint(x, y))
-		painter.end()
-
-
 class QtImage(pg.GraphicsLayoutWidget):
 	""" example application main window """
 
@@ -78,23 +39,6 @@ class QtImage(pg.GraphicsLayoutWidget):
 			channel = image.get_channel("Brightfield")
 			self.set_image(channel)
 			self.set_points(self.points)
-
-	def calculate_scalefactor(self) -> Tuple[float, float]:
-
-		image_width = self.image.width()
-		image_height = self.image.height()
-
-		scene_rect = self.plot.scene().sceneRect()
-		scene_width = scene_rect.width()
-		scene_height = scene_rect.height()
-		scene_height = 1080
-
-		print(f"{scene_rect.size()=}")
-		# application_width, application_height = self.plot.scene().width(), self.plot.scene().height()
-		scalefactor_x = image_width / scene_width
-		scalefactor_y = image_height / scene_height
-
-		return scalefactor_x, scalefactor_y
 
 	def get_mouse_coordinates(self, event) -> PointType:
 		image_pos = self.image.mapFromScene(event.scenePos())
@@ -145,24 +89,3 @@ def numpy_array_to_qimage(array: numpy.ndarray) -> QtGui.QImage:
 	image = QtGui.QImage(array.data, width, height, width, QtGui.QImage.Format_Grayscale8)
 
 	return image
-
-
-def main():
-	import pyqtgraph as pg
-	import pyqtgraph.exporters as exp
-	from pyqtgraph.Qt import QtGui, mkQApp
-
-	# mkQApp("ImageItem transform example")
-
-	app = QtWidgets.QApplication(sys.argv)
-
-	window = QtImage()
-	window.show()
-
-	# widget = pg.PlotWidget()
-
-	sys.exit(app.exec())
-
-
-if __name__ == "__main__":
-	main()
