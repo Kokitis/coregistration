@@ -116,7 +116,9 @@ class QtImage(pg.GraphicsLayoutWidget):
 		self.plot.addItem(self.image)
 		self.points = list()
 
-	def set_points(self, points: List[PointType]):
+	def set_points(self, points: List[PointType] = None):
+		if points is None:
+			points = self.points
 		if points:
 			x, y = zip(*points)
 			if self.series_object is None:

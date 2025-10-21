@@ -1,6 +1,5 @@
 from typing import *
 from dataclasses import dataclass, asdict
-from coregistration import utilities
 from infotools import colortools
 import re
 
