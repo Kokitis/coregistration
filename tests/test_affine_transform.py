@@ -1,5 +1,4 @@
-import pytest
-from coregistration.affine import affinetransform
+from coregistration import affinetransform
 import pytest
 
 from coregistration.affine import affinetransform

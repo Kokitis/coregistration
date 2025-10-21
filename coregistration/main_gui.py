@@ -2,13 +2,9 @@ import sys
 from pathlib import Path
 from typing import *
 from PySide6 import QtWidgets
-from coregistration.guiqt import qtimage
 from coregistration.imagemanager import ImageManager
-from coregistration import resources
-import pandas
+from coregistration import resources, qtimage
 from loguru import logger
-from pprint import pprint
-from dataclasses import dataclass
 import pyqtgraph as pg
 import json
 PointType = Tuple[float, float]
