@@ -15,12 +15,12 @@ pg.setConfigOption('leftButtonPan', False)
 
 
 class MainGui(QtWidgets.QWidget):
-	def __init__(self, window: QtWidgets.QMainWindow, path: Path, folder_output: Path = None):
+	def __init__(self, window: QtWidgets.QMainWindow, path: Path, folder_output: Path = None, application_size:Tuple[int,int] = (1920, 1080)):
 		super().__init__()
 		self.folder_output = folder_output if folder_output else Path(__file__).parent
 		self.window = window
 		self.centralwidget = QtWidgets.QWidget(parent = self.window)
-		self.application_size = (1920, 1080)
+		self.application_size = application_size
 		# self.resize(self.application_size[0], self.application_size[1])
 
 		self.manager = ImageManager(path)
@@ -167,12 +167,13 @@ def format_export(barcode_reference: str, barcode_query: str, coordinates_refere
 def main():
 	path = Path("/media/proginoskes/storage/proginoskes/Documents/projects/HCC-CBS-231-Hillman-JLuke-PDO-immune/data/PilotExpt-100125/debug/coregistration.tsv")
 	folder_output = Path("/media/proginoskes/storage/proginoskes/Documents/projects/HCC-CBS-231-Hillman-JLuke-PDO-immune/data/PilotExpt-100125/debug/")
+	application_size = (1920, 1380)
 	app = QtWidgets.QApplication(sys.argv)
 
 	window = QtWidgets.QMainWindow()
-	window.resize(1920, 1080)
+	window.resize(application_size[0], application_size[1])
 
-	ui = MainGui(window, path, folder_output = folder_output)
+	ui = MainGui(window, path, folder_output = folder_output, application_size = application_size)
 	window.show()
 
 	sys.exit(app.exec())
