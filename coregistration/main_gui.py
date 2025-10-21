@@ -72,7 +72,7 @@ class MainGui(QtWidgets.QWidget):
 		matrix = affinetransform.solve_affine(coordinates_reference, coordinates_query).tolist()
 
 		if len(coordinates_reference) != len(coordinates_query):
-			message = f"The imagse do not contain the same number of points! ({len(coordinates_reference)} != {len(coordinates_query)})"
+			message = f"The images do not contain the same number of points! ({len(coordinates_reference)} != {len(coordinates_query)}). Exporting is cancelled."
 			logger.error(message)
 		else:
 			if export_format == 'original':
@@ -135,7 +135,6 @@ class MainGui(QtWidgets.QWidget):
 		self.image_widget_reference.setGeometry(0, 50, maximum_width, maximum_height)
 		self.image_widget_query.setGeometry(0, (self.application_size[1] // 2) + 10, maximum_width, maximum_height)
 
-		logger.debug(f"Updating labels...")
 		index_group = self.manager.index
 		total_groups = len(self.manager.groups)
 

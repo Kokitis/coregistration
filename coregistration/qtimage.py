@@ -10,7 +10,6 @@ import matplotlib.colors as mcolors
 import random
 
 pg.setConfigOption('leftButtonPan', False)
-from pprint import pprint
 
 PointType = Tuple[int | float, int | float]
 
@@ -87,7 +86,6 @@ class QtImage(pg.GraphicsLayoutWidget):
 		self.set_points(self.points)
 
 	def set_image(self, array: numpy.ndarray):
-		logger.debug(f"Setting image...")
 		self.image = pg.ImageItem(array, axisOrder = 'row-major')
 		self.plot.clear()
 		self.plot.addItem(self.image)
@@ -98,7 +96,6 @@ class QtImage(pg.GraphicsLayoutWidget):
 			points = self.points
 		if points:
 			colors = self._get_point_colors()
-			logger.debug(f"{len(points)=}\t{len(colors)=}")
 			x, y = zip(*points)
 			if self.series_object is None:
 				self.series_object = self.plot.plot(
